@@ -1,0 +1,512 @@
+/* Albums / Kanban Board Styles */
+
+.albums-page {
+  max-width: none;
+  overflow-x: auto;
+}
+
+.albums-page > .page-header {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  max-width: 100vw;
+  padding-right: var(--space-8);
+}
+
+.albums-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .albums-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+}
+
+.album-stage-card {
+  aspect-ratio: 1; /* Makes them square */
+  background: var(--bg-secondary);
+  border-radius: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  border: 1px solid var(--glass-border);
+}
+
+.album-stage-card:hover {
+  transform: translateY(-4px);
+  background: var(--bg-hover);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.album-stage-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin-bottom: var(--space-2);
+}
+
+.album-stage-card h3 {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.album-stage-count {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+}
+
+/* Album Card */
+.album-card {
+  display: flex;
+  gap: var(--space-2);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.album-card:hover {
+  background: var(--bg-hover);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.album-card-dragging {
+  box-shadow: var(--shadow-xl);
+  transform: rotate(3deg) scale(1.05);
+  opacity: 0.9;
+  z-index: 100;
+}
+
+.album-card-urgent {
+  border-color: rgba(245, 158, 11, 0.3);
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.1);
+}
+
+.album-card-drag {
+  display: flex;
+  align-items: flex-start;
+  padding-top: var(--space-1);
+  color: var(--text-muted);
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.album-card-drag:active {
+  cursor: grabbing;
+}
+
+.album-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.album-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.album-card-type {
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.album-card-name {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.album-detail-icon {
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+/* Detail rows — stacked vertically */
+.album-card-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  padding: 3px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.album-card-detail-row svg {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.album-card-detail-row span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.album-card-payment {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.album-card-payment-sep {
+  color: var(--text-muted);
+  margin: 0 1px;
+}
+
+.album-card-payment-total {
+  color: var(--text-tertiary);
+}
+
+.album-card-balance-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 600;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.album-card-balance-badge.badge-warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--warning);
+}
+
+.album-card-balance-badge.badge-success {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+}
+
+.album-card-stage-info {
+  color: var(--text-tertiary);
+}
+
+.album-card-stage-date {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.album-card-notes-row {
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+.album-card-notes-row span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.album-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-xs);
+  color: var(--text-tertiary);
+}
+
+.album-card-meta span {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.album-card-notes {
+  margin-top: var(--space-2);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Album Detail */
+.album-detail-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.album-detail-label {
+  display: block;
+  font-size: var(--font-xs);
+  color: var(--text-tertiary);
+  margin-bottom: 2px;
+}
+
+.album-detail-value {
+  display: block;
+  font-size: var(--font-sm);
+  font-weight: 500;
+}
+
+.album-detail-history {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--glass-border);
+}
+
+.stage-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-left: var(--space-2);
+}
+
+.stage-timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  position: relative;
+  padding-bottom: var(--space-4);
+  padding-left: var(--space-4);
+}
+
+.stage-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 12px;
+  bottom: 0;
+  width: 2px;
+  background: var(--glass-border);
+}
+
+.stage-timeline-item:last-child::before {
+  display: none;
+}
+
+.stage-timeline-dot {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.stage-timeline-content {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .kanban-board {
+    padding-bottom: var(--space-8);
+  }
+
+  .kanban-column {
+    flex: 0 0 240px;
+  }
+}
+
+/* Progress Update Button on Album Card */
+.album-progress-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+}
+
+.album-progress-btn:hover {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+  transform: rotate(45deg);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* Add Album Preview */
+.add-album-preview {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-2);
+  animation: fadeInUp 0.2s ease;
+}
+
+.add-album-preview-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.add-album-preview-row:last-child {
+  border-bottom: none;
+}
+
+.add-album-preview-label {
+  font-size: var(--font-xs);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.add-album-preview-value {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.add-album-warning {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--radius-md);
+  font-size: var(--font-sm);
+  color: var(--warning);
+}
+
+/* Progress Modal */
+.progress-album-info {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--glass-border);
+}
+
+.progress-album-info h3 {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+}
+
+.progress-current-stage {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+}
+
+.progress-stage-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.progress-stage-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--font-sm);
+  position: relative;
+}
+
+.progress-stage-option input[type="radio"] {
+  display: none;
+}
+
+.progress-stage-option:hover {
+  background: var(--bg-hover);
+  border-color: var(--stage-color, var(--glass-border));
+}
+
+.progress-stage-option.selected {
+  background: color-mix(in srgb, var(--stage-color) 8%, var(--bg-tertiary));
+  border-color: var(--stage-color);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--stage-color) 15%, transparent);
+}
+
+.progress-stage-option.current {
+  opacity: 0.6;
+}
+
+.progress-stage-option.current.selected {
+  opacity: 1;
+}
+
+.progress-stage-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.progress-stage-label {
+  flex: 1;
+  font-weight: 500;
+}
+
+.progress-stage-current-badge {
+  font-size: 10px;
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-tertiary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-help-text {
+  font-size: var(--font-xs);
+  line-height: 1.4;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

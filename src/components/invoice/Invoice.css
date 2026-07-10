@@ -1,0 +1,371 @@
+/* Invoice Template Styles — Print-optimized Professional Invoice */
+
+.invoice-wrapper {
+  background: #ffffff;
+  color: #1a1a2e;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.invoice-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+/* Header */
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.invoice-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.invoice-logo {
+  flex-shrink: 0;
+}
+
+.invoice-studio-name {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.invoice-studio-tagline {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 2px 0 0;
+}
+
+.invoice-title-block {
+  text-align: right;
+}
+
+.invoice-title {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #d97706;
+  margin: 0 0 12px;
+}
+
+.invoice-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.invoice-meta-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.invoice-meta-row span {
+  color: #6b7280;
+}
+
+.invoice-meta-row strong {
+  color: #1a1a2e;
+  min-width: 100px;
+  text-align: right;
+}
+
+.invoice-status {
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.invoice-status-paid {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.invoice-status-pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+/* Divider */
+.invoice-divider {
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b, #d97706, #f59e0b);
+  border-radius: 2px;
+  margin: 20px 0;
+}
+
+/* Addresses */
+.invoice-addresses {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.invoice-address-block h3 {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #d97706;
+  margin: 0 0 8px;
+}
+
+.invoice-address-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 4px;
+}
+
+.invoice-address-block p {
+  margin: 2px 0;
+  color: #4b5563;
+  font-size: 12px;
+}
+
+/* Table */
+.invoice-table-section {
+  margin-bottom: 24px;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.invoice-table thead {
+  background: #f8f5f0;
+}
+
+.invoice-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+  border-bottom: 2px solid #e5e7eb;
+  background: #f8f5f0;
+}
+
+.invoice-table td {
+  padding: 14px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+  vertical-align: top;
+}
+
+.invoice-table td strong {
+  color: #1a1a2e;
+  font-size: 14px;
+}
+
+.invoice-table tr:hover td {
+  background: transparent;
+}
+
+.invoice-location {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.invoice-notes {
+  font-size: 11px;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.invoice-type-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: #fef3c7;
+  color: #d97706;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Summary */
+.invoice-summary {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.invoice-summary-left {
+  flex: 1;
+}
+
+.invoice-summary-right {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.invoice-summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+.invoice-summary-row span:first-child {
+  color: #6b7280;
+}
+
+.invoice-summary-row span:last-child {
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.invoice-summary-total {
+  background: #f8f5f0;
+  border-radius: 8px;
+  margin-top: 4px;
+  font-weight: 700;
+}
+
+.invoice-summary-total span:first-child {
+  color: #1a1a2e;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.invoice-summary-total span:last-child {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.invoice-summary-paid span:last-child {
+  color: #059669;
+}
+
+.invoice-summary-balance {
+  background: #fef3c7;
+  border-radius: 8px;
+  margin-top: 4px;
+}
+
+.invoice-summary-balance span:first-child {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.invoice-summary-balance span:last-child {
+  color: #d97706;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+/* Payment History */
+.invoice-payment-history h4 {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+  margin: 0 0 8px;
+}
+
+.invoice-payment-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 12px;
+}
+
+.invoice-payment-date {
+  color: #6b7280;
+  min-width: 90px;
+}
+
+.invoice-payment-method {
+  padding: 2px 8px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.invoice-payment-amount {
+  font-weight: 600;
+  color: #059669;
+}
+
+.invoice-payment-note {
+  color: #9ca3af;
+  font-size: 11px;
+  font-style: italic;
+}
+
+/* Footer */
+.invoice-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+}
+
+.invoice-footer h4 {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #d97706;
+  margin: 0 0 6px;
+}
+
+.invoice-footer p {
+  margin: 2px 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.invoice-bottom-bar {
+  text-align: center;
+  padding: 12px;
+  background: #f8f5f0;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* Print styles */
+@media print {
+  .invoice-wrapper {
+    background: white;
+  }
+
+  .invoice-page {
+    padding: 20px;
+    max-width: none;
+  }
+
+  .invoice-summary-total,
+  .invoice-table th {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
