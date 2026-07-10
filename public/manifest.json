@@ -2,7 +2,7 @@
   "name": "Studio Manager Pro",
   "short_name": "Studio Pro",
   "description": "Professional Photography Studio Management System",
-  "start_url": "/",
+  "start_url": "/studio-manager/",
   "display": "standalone",
   "background_color": "#0f1117",
   "theme_color": "#0f1117",
