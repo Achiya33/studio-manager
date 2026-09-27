@@ -6,18 +6,37 @@ export const getAlbums = async (req, res) => {
     const albums = await Album.find({ studioId }).populate('shootId').sort({ createdAt: -1 });
     res.status(200).json(albums);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error fetching albums:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
 export const createAlbum = async (req, res) => {
   try {
-    const album = new Album(req.body);
-    album.stageHistory.push({ stage: album.stage, movedBy: req.body.createdBy || 'system' });
+    // Only allow whitelisted fields
+    const { studioId, shootId, clientName, shootType, shootDate, priority, notes, stage, createdBy } = req.body;
+
+    if (!studioId || !shootId || !clientName || !shootType || !shootDate) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    const album = new Album({
+      studioId,
+      shootId,
+      clientName: String(clientName).trim().slice(0, 200),
+      shootType: String(shootType).trim().slice(0, 100),
+      shootDate: new Date(shootDate),
+      priority: ['normal', 'high', 'urgent'].includes(priority) ? priority : 'normal',
+      notes: String(notes || '').trim().slice(0, 2000),
+      stage: String(stage || 'to-design').trim().slice(0, 50)
+    });
+
+    album.stageHistory.push({ stage: album.stage, movedBy: createdBy || req.user.uid });
     await album.save();
     res.status(201).json(album);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error('Error creating album:', error);
+    res.status(400).json({ message: 'Server error' });
   }
 };
 
@@ -25,32 +44,52 @@ export const updateAlbum = async (req, res) => {
   try {
     const { id } = req.params;
     
+    // Only allow whitelisted fields
+    const allowedFields = ['clientName', 'shootType', 'shootDate', 'priority', 'notes', 'stage'];
+    const updateData = {};
+
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        if (field === 'priority') {
+          updateData[field] = ['normal', 'high', 'urgent'].includes(req.body[field]) ? req.body[field] : 'normal';
+        } else if (field === 'shootDate') {
+          updateData[field] = new Date(req.body[field]);
+        } else {
+          updateData[field] = String(req.body[field]).trim().slice(0, 2000);
+        }
+      }
+    }
+
     // Check if stage is changing to update history
     if (req.body.stage) {
       const currentAlbum = await Album.findById(id);
       if (currentAlbum && currentAlbum.stage !== req.body.stage) {
-        req.body.$push = {
+        updateData.$push = {
           stageHistory: {
             stage: req.body.stage,
-            movedBy: req.body.updatedBy || 'system'
+            movedBy: req.body.updatedBy || req.user.uid
           }
         };
       }
     }
 
-    const album = await Album.findByIdAndUpdate(id, req.body, { new: true });
+    const album = await Album.findByIdAndUpdate(id, updateData, { new: true });
+    if (!album) return res.status(404).json({ message: 'Album not found' });
     res.status(200).json(album);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error('Error updating album:', error);
+    res.status(400).json({ message: 'Server error' });
   }
 };
 
 export const deleteAlbum = async (req, res) => {
   try {
     const { id } = req.params;
-    await Album.findByIdAndDelete(id);
+    const album = await Album.findByIdAndDelete(id);
+    if (!album) return res.status(404).json({ message: 'Album not found' });
     res.status(200).json({ message: 'Album deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error deleting album:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 };

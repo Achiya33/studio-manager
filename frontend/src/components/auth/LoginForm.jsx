@@ -341,7 +341,7 @@ export default function LoginForm() {
                 <label className="form-label" htmlFor="reg-studio-name">Studio Name</label>
                 <div className="input-with-icon">
                   <Building size={18} className="input-icon" />
-                  <input id="reg-studio-name" type="text" value={studioName} onChange={(e) => setStudioName(e.target.value)} placeholder="e.g. Wedding Diary" required />
+                  <input id="reg-studio-name" type="text" value={studioName} onChange={(e) => setStudioName(e.target.value)} placeholder="Enter your studio name" required />
                 </div>
               </div>
 
@@ -436,7 +436,7 @@ export default function LoginForm() {
                 <label className="form-label" htmlFor="setup-studio-name">Studio Name</label>
                 <div className="input-with-icon">
                   <Building size={18} className="input-icon" />
-                  <input id="setup-studio-name" type="text" value={studioName} onChange={(e) => setStudioName(e.target.value)} placeholder="e.g. Wedding Diary" required autoFocus />
+                  <input id="setup-studio-name" type="text" value={studioName} onChange={(e) => setStudioName(e.target.value)} placeholder="Enter your studio name" required autoFocus />
                 </div>
               </div>
 

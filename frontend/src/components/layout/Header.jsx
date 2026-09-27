@@ -19,7 +19,7 @@ export default function Header({ onMenuToggle }) {
   const [showNotifications, setShowNotifications] = useState(false);
   const dropdownRef = useRef(null);
 
-  const title = pageTitles[location.pathname] || 'Wedding Diary Manager';
+  const title = pageTitles[location.pathname] || 'Studio Manager Pro';
 
   useEffect(() => {
     const handleClickOutside = (e) => {

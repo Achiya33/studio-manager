@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { demoStore, generateId } from '../lib/demoStore';
 import { ALBUM_STAGES, VIDEO_STAGES, VIDEO_TYPES, STAFF_ALLOWED_STAGES, getAlbumStageConfig, getVideoStageConfig } from '../lib/constants';
+import { authFetch } from '../lib/authFetch';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotifications } from '../contexts/NotificationContext';
 import AlbumCard from '../components/albums/AlbumCard';
@@ -43,8 +44,8 @@ export default function AlbumsPage() {
     setLoading(true);
     try {
       const [albumsRes, shootsRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/albums/studio/${activeStudio._id}`),
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/shoots/studio/${activeStudio._id}`)
+        authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/albums/studio/${activeStudio._id}`),
+        authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/shoots/studio/${activeStudio._id}`)
       ]);
       
       if (albumsRes.ok) {
@@ -78,9 +79,8 @@ export default function AlbumsPage() {
         studioId: activeStudio._id,
         createdBy: user?.uid
       };
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/albums`, {
+      const res = await authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/albums`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
       if (!res.ok) throw new Error('Failed to create album');
@@ -106,9 +106,8 @@ export default function AlbumsPage() {
     }
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/albums/${albumId}`, {
+      const res = await authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/albums/${albumId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...updates, updatedBy: user?.uid })
       });
       if (!res.ok) throw new Error('Update failed');

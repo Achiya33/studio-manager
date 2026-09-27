@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { db, isFirebaseAvailable, firebaseConfig } from '../lib/firebase';
 import { collection, query, where, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from 'firebase/auth';
 import emailjs from '@emailjs/browser';
 import { demoStore } from '../lib/demoStore';
+import { authFetch } from '../lib/authFetch';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotifications } from '../contexts/NotificationContext';
 import { Navigate } from 'react-router-dom';
@@ -108,7 +109,7 @@ function PackageManager({ showToast }) {
   const fetchPackages = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/packages/studio/${activeStudio._id}`);
+      const res = await authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/packages/studio/${activeStudio._id}`);
       if (res.ok) {
         const data = await res.json();
         setPackages(data.map(p => ({ ...p, id: p._id })));
@@ -124,17 +125,15 @@ function PackageManager({ showToast }) {
   const handleSave = async (pkg) => {
     try {
       if (editing) {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/packages/${editing.id}`, {
+        const res = await authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/packages/${editing.id}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(pkg)
         });
         if (!res.ok) throw new Error('Update failed');
         showToast('Package updated', 'success');
       } else {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/packages`, {
+        const res = await authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/packages`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...pkg, studioId: activeStudio._id })
         });
         if (!res.ok) throw new Error('Create failed');
@@ -152,7 +151,7 @@ function PackageManager({ showToast }) {
   const handleDelete = async (id) => {
     if (window.confirm('Delete this package?')) {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/packages/${id}`, { method: 'DELETE' });
+        const res = await authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/packages/${id}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Delete failed');
         showToast('Package deleted', 'info');
         fetchPackages();
@@ -264,7 +263,7 @@ function StaffManager({ showToast }) {
 
   const fetchStaff = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/studios/${activeStudio._id}/members`);
+      const res = await authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/studios/${activeStudio._id}/members`);
       if (res.ok) {
         const data = await res.json();
         // Exclude the current admin from the 'staff' view if desired, or keep everyone to show the team
@@ -291,10 +290,9 @@ function StaffManager({ showToast }) {
       
       const newStaffUid = userCredential.user.uid;
       
-      // 2. Sync User to MongoDB
-      const syncRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/sync`, {
+      // 2. Sync User to MongoDB (use authFetch — sends admin's token)
+      const syncRes = await authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/sync`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           uid: newStaffUid,
           email: staffEmail.toLowerCase(),
@@ -306,9 +304,8 @@ function StaffManager({ showToast }) {
       if (!syncRes.ok) throw new Error('Failed to sync user to database');
 
       // 3. Add User to Studio Members
-      const addRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/studios/${activeStudio._id}/members`, {
+      const addRes = await authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/studios/${activeStudio._id}/members`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           uid: newStaffUid,
           role: 'staff'
@@ -316,8 +313,12 @@ function StaffManager({ showToast }) {
       });
 
       if (!addRes.ok) throw new Error('Failed to add user to studio');
+
+      // 4. Send a password reset email so the staff member can set their own password
+      // SECURITY FIX: Never send plaintext passwords via email!
+      await sendPasswordResetEmail(secondaryAuth, staffEmail.toLowerCase());
       
-      // 4. Send automated email via EmailJS
+      // 5. Send invitation notification email via EmailJS (without password)
       if (import.meta.env.VITE_EMAILJS_SERVICE_ID) {
         await emailjs.send(
           import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -326,7 +327,7 @@ function StaffManager({ showToast }) {
             staff_name: staffName,
             studio_name: activeStudio.name,
             staff_email: staffEmail.toLowerCase(),
-            staff_password: staffPassword,
+            staff_password: '(A password reset link has been sent to their email)',
             app_link: window.location.origin
           },
           import.meta.env.VITE_EMAILJS_PUBLIC_KEY
@@ -339,7 +340,7 @@ function StaffManager({ showToast }) {
       setStaffEmail('');
       setStaffPassword('');
       setShowAdd(false);
-      showToast('Staff account created and email sent successfully!', 'success');
+      showToast('Staff account created! A password reset link has been sent to their email.', 'success');
       
     } catch (err) {
       console.error(err);
@@ -356,7 +357,7 @@ function StaffManager({ showToast }) {
     }
     if (!window.confirm('Remove this staff member? They will lose access to your studio.')) return;
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/studios/${activeStudio._id}/members/${staffUid}`, {
+      const res = await authFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/studios/${activeStudio._id}/members/${staffUid}`, {
         method: 'DELETE'
       });
       if (!res.ok) throw new Error('Failed to remove staff');
