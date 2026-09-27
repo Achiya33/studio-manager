@@ -35,7 +35,7 @@ export default function ShootsPage() {
     setLoading(true);
     try {
       // Assuming shootRoutes handles GET /api/shoots/studio/:studioId
-      const res = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/shoots/studio/${activeStudio._id}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/shoots/studio/${activeStudio._id}`);
       if (res.ok) {
         const data = await res.json();
         // MongoDB uses _id instead of id. Map it for frontend usage.
@@ -67,7 +67,7 @@ export default function ShootsPage() {
   const handleSave = async (shootData) => {
     try {
       if (editingShoot) {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/shoots/${editingShoot._id}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/shoots/${editingShoot._id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(shootData)
@@ -75,7 +75,7 @@ export default function ShootsPage() {
         if (!res.ok) throw new Error('Update failed');
         showToast('Shoot updated successfully', 'success');
       } else {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/shoots`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/shoots`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...shootData, studioId: activeStudio._id, status: 'upcoming', amount: shootData.packageAmount || 0 })
@@ -108,7 +108,7 @@ export default function ShootsPage() {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this shoot?')) {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/shoots/${id}`, { method: 'DELETE' });
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/shoots/${id}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Delete failed');
         showToast('Shoot deleted', 'info');
         fetchShoots();

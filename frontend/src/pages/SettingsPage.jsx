@@ -108,7 +108,7 @@ function PackageManager({ showToast }) {
   const fetchPackages = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/packages/studio/${activeStudio._id}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/packages/studio/${activeStudio._id}`);
       if (res.ok) {
         const data = await res.json();
         setPackages(data.map(p => ({ ...p, id: p._id })));
@@ -124,7 +124,7 @@ function PackageManager({ showToast }) {
   const handleSave = async (pkg) => {
     try {
       if (editing) {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/packages/${editing.id}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/packages/${editing.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(pkg)
@@ -132,7 +132,7 @@ function PackageManager({ showToast }) {
         if (!res.ok) throw new Error('Update failed');
         showToast('Package updated', 'success');
       } else {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/packages`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/packages`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...pkg, studioId: activeStudio._id })
@@ -152,7 +152,7 @@ function PackageManager({ showToast }) {
   const handleDelete = async (id) => {
     if (window.confirm('Delete this package?')) {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/packages/${id}`, { method: 'DELETE' });
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/packages/${id}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Delete failed');
         showToast('Package deleted', 'info');
         fetchPackages();
@@ -264,7 +264,7 @@ function StaffManager({ showToast }) {
 
   const fetchStaff = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/studios/${activeStudio._id}/members`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/studios/${activeStudio._id}/members`);
       if (res.ok) {
         const data = await res.json();
         // Exclude the current admin from the 'staff' view if desired, or keep everyone to show the team
@@ -292,7 +292,7 @@ function StaffManager({ showToast }) {
       const newStaffUid = userCredential.user.uid;
       
       // 2. Sync User to MongoDB
-      const syncRes = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/users/sync`, {
+      const syncRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/sync`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -306,7 +306,7 @@ function StaffManager({ showToast }) {
       if (!syncRes.ok) throw new Error('Failed to sync user to database');
 
       // 3. Add User to Studio Members
-      const addRes = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/studios/${activeStudio._id}/members`, {
+      const addRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/studios/${activeStudio._id}/members`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -356,7 +356,7 @@ function StaffManager({ showToast }) {
     }
     if (!window.confirm('Remove this staff member? They will lose access to your studio.')) return;
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/studios/${activeStudio._id}/members/${staffUid}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/studios/${activeStudio._id}/members/${staffUid}`, {
         method: 'DELETE'
       });
       if (!res.ok) throw new Error('Failed to remove staff');

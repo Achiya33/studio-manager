@@ -43,8 +43,8 @@ export default function AlbumsPage() {
     setLoading(true);
     try {
       const [albumsRes, shootsRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/albums/studio/${activeStudio._id}`),
-        fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/shoots/studio/${activeStudio._id}`)
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/albums/studio/${activeStudio._id}`),
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/shoots/studio/${activeStudio._id}`)
       ]);
       
       if (albumsRes.ok) {
@@ -78,7 +78,7 @@ export default function AlbumsPage() {
         studioId: activeStudio._id,
         createdBy: user?.uid
       };
-      const res = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/albums`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/albums`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -106,7 +106,7 @@ export default function AlbumsPage() {
     }
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/albums/${albumId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/albums/${albumId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...updates, updatedBy: user?.uid })

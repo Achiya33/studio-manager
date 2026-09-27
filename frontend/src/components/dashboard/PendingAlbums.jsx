@@ -13,7 +13,7 @@ export default function PendingAlbums() {
 
   useEffect(() => {
     if (activeStudio) {
-      fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/albums/studio/${activeStudio._id}`)
+      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/albums/studio/${activeStudio._id}`)
         .then(res => res.json())
         .then(data => {
           if (Array.isArray(data)) {

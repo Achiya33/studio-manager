@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
 
   const fetchStudios = async (uid) => {
     try {
-      const studiosRes = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/studios/my-studios/${uid}`);
+      const studiosRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/studios/my-studios/${uid}`);
       if (studiosRes.ok) {
         const studiosData = await studiosRes.json();
         setUserStudios(studiosData);
@@ -37,7 +37,7 @@ export function AuthProvider({ children }) {
         if (firebaseUser) {
           try {
             // Sync with our Node.js backend
-            const response = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/users/sync`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/sync`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ export function AuthProvider({ children }) {
       const targetUid = uidOverride || user?.uid;
       if (!targetUid) throw new Error("No user ID available for profile update");
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/users/${targetUid}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/${targetUid}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(details),
@@ -153,7 +153,7 @@ export function AuthProvider({ children }) {
       const targetUid = uidOverride || user?.uid;
       if (!targetUid) throw new Error("No user ID available to create studio");
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || 'http://localhost:5000'}'}/api/studios`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/studios`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
